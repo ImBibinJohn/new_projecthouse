@@ -44,6 +44,8 @@ urlpatterns = [
     re_path(r'^viewieeedetail/(?P<id>\d+)$', views.viewieeedetail, name='viewieeedetail'),
     re_path(r'^viewprojectdetails$', views.viewprojectdetails, name='viewprojectdetails'),
     re_path(r'^viewieeedetails$', views.viewieeedetails, name='viewieeedetails'),
+    re_path(r'^adminieeeviews/(?P<id>\d+)$', views.adminieeeviews, name='adminieeeviews'),
+
 
     #Home Page
     re_path(r'^$',views.userdashboard, name='userdashboard'),
@@ -77,6 +79,7 @@ urlpatterns = [
     #delete projects
     re_path(r'^viewprojectdetail/deleteprojectss/(?P<id>\d+)$', views.deleteprojectss,name='deleteprojectss'),
     re_path(r'^viewprojectdetail/deleteprojects/(?P<id>\d+)$', views.deleteprojects,name='deleteprojects'),
+    re_path(r'^deleteieee/(?P<id>\d+)$', views.deleteieee,name='deleteieee'),
     re_path(r'^Intermediate$', views.Intermediate,name='Intermediate'),
 
     #save project details

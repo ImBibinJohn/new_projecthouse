@@ -1,77 +1,86 @@
-{% extends 'administrator/adminbase.html' %} {% load static %} {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            <h4 style="color: rgb(62, 177, 223);">PLATFORMS</h4>
-        </div>
-        <div class="col-md-2">
-            <a href="{% url 'addplatform' %}"><button type="button" class="btn btn-outline-info">Add Platform</button></a>
-        </div>
-        <div class="col-md-12 mt-3">
-            <div class="table-responsive-md">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>PLATFORM NAME</th>
-                            <th>DESCRIPTION</th>
-                            <th>ACTIONS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in platform %}
-                        <tr>
-                            <td style="width:300px;">{{ i.name }}</td>
-                            <td style="width:100%;">{{ i.description }}</td>
-                            <td class="d-flex" style="width:200px;">
-                                <a href="/editplatform/{{ i.platformid }}">
-                                    <button type="button" class="btn btn-outline-info w-100">Edit</button>
-                                </a>
-                                <!-- <a href="/deleteplatform/{{ i.platformid }}"> -->
-                                <button type="button" value="{{ i.platformid }}" onclick="confirmdelete(this)" data-toggle="modal" data-target="#exampleModal" class="btn btn-outline-info w-100 ml-1">Delete</button>
-                                <!-- </a> -->
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+{% extends 'Administrator/adm_base.html' %} {% load static %} {% block body %}
+<style>
+    #choose::file-selector-button {
+        background-color: rgb(100, 139, 165);
+        /* padding: 12px; */
+        color: white;
+        width: 100px;
+        height: 25px;
+    }
+</style>
+<div class="row" style="padding-top:20px; ">
+    <div class="col-12 col-sm-2 col-md-2 col-lg-2"></div>
+
+    <div class="col-12 col-sm-8 col-md-8 col-lg-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body" style="height:auto;padding-top:20px; ">
+                <br>
+                <center>
+                    <h3 class="card-title" style="font-size: x-large;">platforms</h3>
+                </center>
+                <br><br>
+
+                <form method="post" class="post-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+
+                    <div class="form-group">
+                        <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+
+                        <label for="exampleInputName1" style="font-weight: 700;">enter platform name:</label>
+                        <input type="text" name="platform_name" class="form-control" id="exampleInputName1" placeholder="enter platform name:">
+                    </div>
+
+
+
+                    <div class="form-group ">
+                        <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+
+                        <label for="" style="font-weight: 700;">Upload Thumbnail:</label>
+                        <div class="input-group col-xs-12">
+                            <input type="file" name="upload_img" class="form-control  " />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+
+                        <label for="exampleTextarea1" style="font-weight: 700;">  platform Description </label>
+                        <textarea class="form-control" name="platform_description" id="exampleTextarea2" rows="4"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+                        <label for="exampleTextarea1" style="font-weight: 700;"> tutorial Description </label>
+                        <textarea class="form-control" name="tutorial_discription" id="exampleTextarea1" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group ">
+                        <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+                        <label for="" style="font-weight: 700;">Upload video</label>
+                        <div class="input-group col-xs-12">
+                            <input type="file" name="tutorial_video" class="form-control  " />
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+
+                </form>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-info" id="exampleModalLabel">
-                    Project House
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				    <span aria-hidden="true">
-						×
-					</span>
-				</button>
-            </div>
-            <div class="modal-body">
-                <h6 id="modal_body"></h6>
-            </div>
-            <div class="modal-footer">
-                <a id="modelhref" href="">
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModal" id="submit">
-					Delete</button>
-                </a>
-                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 
-<script type="text/javascript">
-    function confirmdelete(element) {
-        var name = "/deleteplatform/" + element.value;
-        document.getElementById('modelhref').setAttribute('href', name)
-        var str = "Are you sure you want to delete this platform ? \n"
-        $("#modal_body").html(str);
-    }
-</script>
-{% endblock %}
+
+
+
+
+
+
+
+
+{% endblock body %}
