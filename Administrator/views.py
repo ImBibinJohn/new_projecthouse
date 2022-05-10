@@ -94,12 +94,6 @@ def mainplatform(request):
     else:
         return redirect('admin_login')
 
-
-def editplatform(request, id):
-    plat1 = Addnewplatform.objects.get(id=id)
-    context = {'platform': plat1}
-    return render(request, 'Administrator/edit platform.html', context)
-
 # update platform
 
 
@@ -911,10 +905,10 @@ def addplatform(request):
         return redirect('admin_login')
 
 
-def editplatform(request, platformid):
+def editplatform(request, id):
     if 'admin' in request.session:
-        plat = Platform.objects.get(platformid=platformid)
-        return render(request, 'Administrator/editplatform.html', {'platform': plat})
+        plat = Addnewplatform.objects.get(id=id)
+        return render(request, 'Administrator/edit_platform.html', {'platform': plat})
     else:
         return redirect('admin_login')
 
@@ -924,11 +918,11 @@ def addplatforms(request):
         if request.method == 'POST':
             name = request.POST['name']
             description = request.POST['description']
-            if Platform.objects.filter(name=name):
+            if Addnewplatform.objects.filter(name=name):
                 messages.info(request, f'Platform named {name} already exists')
                 return redirect('addplatform')
             else:
-                plat = Platform(name=name, description=description)
+                plat = Addnewplatform(name=name, description=description)
                 plat.save()
                 return redirect('platforms')
         else:
@@ -937,12 +931,12 @@ def addplatforms(request):
         return redirect('addplatform')
 
 
-def updateplatform(request, platformid):
+def updateplatform(request, id):
     try:
         if request.method == 'POST':
             name = request.POST.get('name')
             description = request.POST.get('description')
-            plat = Platform.objects.get(platformid=platformid)
+            plat = Addnewplatform.objects.get(id=id)
             plat.name = name
             plat.description = description
             plat.save()
@@ -1199,55 +1193,50 @@ def deletequestionanswer(request, qandaid):
 
 # Jafreena
 def usercreate(request):
-
     if request.method == 'POST':
         fullname = request.POST['name']
-        platformid = request.POST['platformid']
-        level = request.POST['level']
+        platformid = request.POST['pid']
         email = request.POST['email']
         cno = request.POST['cno']
+        coid = request.POST['coid']
         password = request.POST['password']
         conformpassword = request.POST['conformpassword']
         if password == conformpassword:
             if usersign.objects.filter(email=email).exists():
                 messages.info(
                     request, 'This email already exists. Sign up again')
-                return redirect('gosignup')
+                return redirect('userreg')
             else:
                 user = usersign.objects.create(fullname=fullname, platformid=platformid, email=email,
-                                               level=level, cno=cno, password=password, score=0)
+                                               level=0, cno=cno, password=password, score=0, course_id=coid)
                 user.save()
-                return redirect('gologin')
+                return redirect('userlog')
         else:
             messages.info(
                 request, 'Password and conform password does not match')
-            return redirect('gosignup')
+            return redirect('userreg')
 
 
-def gologin(request):
-    return render(request, 'user/user_login.html')
+def userlog(request):
+    return render(request, 'user/userlog.html')
 
 
-def gosignup(request):
-    pl = Platform.objects.all()
+def userreg(request):
+    pl = Addnewplatform.objects.all()
     c = Course.objects.all()
-    return render(request, 'user/user_registration.html', {'pl': pl, 'c': c})
-
+    return render(request, 'user/userreg.html', {'pl': pl, 'c': c})
 
 def userlogin(request):
-
     if request.method == 'POST':
         if usersign.objects.filter(email=request.POST['email'], password=request.POST['password']).exists():
             l = usersign.objects.get(
                 email=request.POST['email'], password=request.POST['password'])
             request.session['login'] = l.sid
-            request.session['level'] = l.level
-            request.session['platform'] = l.platformid
             return redirect('userdash')
 
         else:
             messages.error(request, 'Invalid Email Id or Password.')
-            return render(request, 'user/user_login.html')
+            return render(request, 'user/userlog.html')
 
 
 def userdash(request):
@@ -1396,10 +1385,12 @@ def viewieeedetail(request, id):
     context = {'plat': plat, 'project': project}
     return render(request, 'Administrator/viewieeedetail.html', context)
 
+
 def userpy(request):  # userprojects
     project = Addnewproject.objects.filter(selectplatform='Python')
     context = {'projects': project}
     return render(request, 'Administrator/user python projects.html', context)
+
 
 def userml(request):  # userprojects
     project = Addnewproject.objects.filter(selectplatform='Machine Learning')
@@ -1539,29 +1530,16 @@ def userintership(request):
         platformname = Addnewplatform.objects.all()
         return render(request, 'user/userapplyintership.html', {'platformname': platformname})
 
-
-def gologins(request):
-    return render(request, 'user/user_login.html')
-
-
-def userlog(request):
-    return render(request, 'user/userlog.html')
-
-
-def userreg(request):
-    pl = Platform.objects.all()
-    c = Course.objects.all()
-    return render(request, 'user/userreg.html', {'pl': pl, 'c': c})
-
-
 def viewprojects(request):
     return render(request, 'Administrator/view projects.html')
+
 
 def viewprojectdetails(request):
     plat = Addnewplatform.objects.all()
     project = Addnewproject.objects.all()
     context = {'plat': plat, 'project': project}
     return render(request, 'Administrator/view_projects_detail.html', context)
+
 
 def adminprojectsviews(request, id):
     mem = Addnewplatform.objects.get(id=id).platformname
@@ -1574,11 +1552,13 @@ def adminprojectsviews(request, id):
     else:
         return render(request, 'Administrator/dashboard.html')
 
+
 def viewieeedetails(request):
     plat = Addnewplatform.objects.all()
     project = add_new_ieee.objects.all()
     context = {'plat': plat, 'project': project}
     return render(request, 'Administrator/viewieeedetails.html', context)
+
 
 def adminieeeviews(request, id):
     mem = Addnewplatform.objects.get(id=id).platformname
@@ -1590,8 +1570,8 @@ def adminieeeviews(request, id):
     else:
         return render(request, 'Administrator/dashboard.html')
 
+
 def deleteieee(request, id):
     dela = add_new_ieee.objects.get(id=id)
     dela.delete()
     return redirect('adminDash')
-

@@ -21,7 +21,6 @@ urlpatterns = [
     re_path(r'^mainplatform$', views.mainplatform, name='mainplatform'),
     #profile
     re_path(r'^myprofile$', views.myprofile, name='myprofile'),
-    re_path(r'^gologin$', views.gologin, name='gologin'),
 
     #update profile
     re_path(r'^profileshow/<int:id>$', views.profileshow, name='profileshow'),
@@ -210,12 +209,6 @@ urlpatterns = [
     re_path(r'^deletequestionanswer/<int:qandaid>$', views.deletequestionanswer, name='deletequestionanswer'),
 
     re_path(r'^usercreate$', views.usercreate, name='usercreate'),
-
-
-    re_path(r'^gologins$', views.gologins, name='gologins'),
-
-
-    re_path(r'^gosignup$', views.gosignup, name='gosignup'),
 
     re_path(r'^userlogin$', views.userlogin, name='userlogin'),
     re_path(r'^userdash$', views.userdash, name='userdash'),

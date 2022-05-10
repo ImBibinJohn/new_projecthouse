@@ -1,0 +1,70 @@
+{% extends 'Administrator/adm_base.html' %}{% load static %}
+{% block body %}
+        <div class="page-wrapper" style="background: white;">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">Platforms</h4>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+             <div class="ctn">
+                <form action="{% url 'updateplatform' platform.id %}" method="POST" enctype="multipart/form-data" class="needs-validation" >
+                                 {% csrf_token %}
+                	<div class="col-md-12 col-lg-6 p-4" style="margin-left: 10%;">
+                    <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+                    <span class="font-medium" style="margin-left: 3px;">Enter platform name:</span>
+                    <input type="text" class="inp" name="platformname" placeholder="Enter platform Name" style="margin-left: 220px;width: 50%;position:relative;bottom: 25px;" value="{{ platform.platformname }}">
+                </div>
+                      <div class="col-md-12 col-lg-6 p-4" style="margin-left: 10%;">
+                    <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+                    <span class="font-medium" style="margin-left: 3px;">upload thumbnail:</span>
+                    <input type="file" class="inp" name="thumbimg"  style="margin-left: 220px;position:relative;bottom: 25px;width: 50%;">
+                      </div>
+                     <div class="col-md-12 col-lg-6 p-4" style="margin-left: 10%;">
+                    <img src="{% static 'plugins/images/Icon-awesome-circle-notch.png' %}" alt="loading" width="16">
+                    <span class="font-medium" style="margin-left: 3px;">Enter short description:</span>
+                   <textarea class="form-control inp" rows="5" name="description" id="shortdescription" style="margin-left: 220px;position: relative;bottom: 25px;width: 50%;">{{ platform.description }}</textarea>
+                </div>
+                <div class="col-md-12 col-lg-6 p-4" style="margin-left: 10%;">
+                    <center>
+               <button class="btn btn-secondary cancel" type="reset"  style="width:80px;background: #B2C1C2;border-radius: 16px;">Cancel</button>
+               <button class="btn btn-secondary update" type="submit" style="width:80px; background: #66F0F5;border-radius: 16px;">Submit</button>
+                </center>
+                </div>
+                </form>
+            </div>
+
+            </div></div></div></body>
+
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{% static 'plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static 'plugins/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-style-switcher.js' %}"></script>
+    <script src="{% static 'plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js' %}"></script>
+    <!--Wave Effects -->
+    <script src="{% static 'js/waves.js' %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="{% static 'plugins/bower_components/chartist/dist/chartist.min.js' %}"></script>
+    <script src="{% static 'plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'js/pages/dashboards/dashboard1.js' %}"></script>
+
+
+</body>
+</html>
+{% endblock body %}
