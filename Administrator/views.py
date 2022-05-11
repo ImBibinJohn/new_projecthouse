@@ -1207,8 +1207,8 @@ def usercreate(request):
                     request, 'This email already exists. Sign up again')
                 return redirect('userreg')
             else:
-                user = usersign.objects.create(fullname=fullname, platformid=platformid, email=email,
-                                               level=0, cno=cno, password=password, score=0, course_id=coid)
+                user = usersign(fullname=fullname, platformid=platformid, email=email,
+                                level=0, cno=cno, password=password, score=0, course_id=coid)
                 user.save()
                 return redirect('userlog')
         else:
@@ -1222,9 +1222,10 @@ def userlog(request):
 
 
 def userreg(request):
-    pl = Addnewplatform.objects.all()
+    pl = Platform.objects.all()
     c = Course.objects.all()
     return render(request, 'user/userreg.html', {'pl': pl, 'c': c})
+
 
 def userlogin(request):
     if request.method == 'POST':
@@ -1241,21 +1242,9 @@ def userlogin(request):
 
 def userdash(request):
     l = usersign.objects.get(sid=request.session['login'])
-    platformid = l.platformid
-    courseid = l.level
-    pl = Platform.objects.get(platformid=platformid)
-
-    ca = Course.objects.filter(courseid=courseid).values('description').first()
-    c = Course.objects.get(courseid=courseid)
-
-    cc = MEDIA_ROOT+ca['description']
-    print(cc)
-
-    f1 = open(cc, "r")
-
-    a = f1.read()
-
-    return render(request, 'user/userdash.html', {'l': l, "pl": pl, "ca": ca, "c": c, "a": a})
+    pl = Platform.objects.get(platformid=l.platformid)
+    c = Course.objects.get(courseid=l.course_id)
+    return render(request, 'user/userdash.html', {'pl': pl, 'c': c, 'l': l})
 
 
 def userprofile(request):
@@ -1529,6 +1518,7 @@ def userintership(request):
     else:
         platformname = Addnewplatform.objects.all()
         return render(request, 'user/userapplyintership.html', {'platformname': platformname})
+
 
 def viewprojects(request):
     return render(request, 'Administrator/view projects.html')
