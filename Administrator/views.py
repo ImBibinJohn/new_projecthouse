@@ -1242,24 +1242,24 @@ def userlogin(request):
 
 def userdash(request):
     l = usersign.objects.get(sid=request.session['login'])
-    pl = Platform.objects.get(platformid=l.platformid)
-    c = Course.objects.get(courseid=l.course_id)
+    pl=Platform.objects.get(platformid=l.platformid)
+    c=Course.objects.get(courseid=l.course_id)   
     return render(request, 'user/userdash.html', {'pl': pl, 'c': c, 'l': l})
 
 
 def userprofile(request):
     l = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
+    p= Platform.objects.get(platformid=l.platformid)
+    c= Course.objects.get(courseid=l.course_id) 
 
     return render(request, 'user/profile.html', {'l': l, 'p': p, 'c': c})
 
 
 def tutorials(request):
     ll = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
-    l = Lecture.objects.filter(courseid=request.session['level'])
+    p= Platform.objects.get(platformid=ll.platformid)
+    c= Course.objects.get(courseid=ll.course_id) 
+    l= Lecture.objects.filter(courseid=ll.level)
     return render(request, 'user/tutorial.html', {'l': l, 'll': ll, 'p': p, 'c': c})
 
 
@@ -1295,54 +1295,47 @@ def userlogout(request):
     return redirect('gologin')
 
 
-def edituserprofile(request):
-    l = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
-    pl = Platform.objects.all()
-    co = Course.objects.all()
-    return render(request, 'user/edituserprofile.html', {'l': l, 'p': p, 'c': c, 'pl': pl, 'co': co})
+def edituserprofile(request, id):   
+    l= usersign.objects.get(sid=id)
+    p= Platform.objects.get(platformid=l.platformid)
+    c= Course.objects.get(courseid=l.course_id)
+    pl=Platform.objects.all()  
+    co=Course.objects.all() 
+    return render(request,'user/edituserprofile.html',{'l': l,'p':p,'c':c,'pl':pl,'co':co} )
 
-
-def updateuserprofile(request):
-    l = usersign.objects.get(sid=request.session['login'])
-
-    l.fullname = request.POST['name']
-    l.platformid = request.POST['platformid']
-    l.level = request.POST['level']
-    l.email = request.POST['email']
-    l.cno = request.POST['cno']
-    l.password = request.POST['password']
-
-    l.save()
-
-    return redirect('gologin')
-
-
+def updateuserprofile(request, id):
+    if request.method == "POST":
+        l= usersign.objects.get(sid=id)        
+        l.fullname = request.POST['name']
+        l.platformid = request.POST['platformid']
+        l.email = request.POST['email']
+        l.cno  = request.POST['cno']
+        l.password = request.POST['password']
+        l.save()
+        
+        return redirect('userlog')
+        
 def certificate(request):
-    l = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
-    s = float(l.score)
-    if(s > 4):
-        return render(request, 'user/certificate.html', {'l': l, 'p': p, 'c': c})
-    else:
-        return render(request, 'user/nocertificate.html', {'l': l, 'p': p, 'c': c})
-
+    l= usersign.objects.get(sid=request.session['login'])
+    p= Platform.objects.get(platformid=l.platformid)
+    c= Course.objects.get(courseid=l.course_id)
+    s=float(l.score)
+    if(s>4):
+        return render(request,'user/certificate.html',{'l': l,'p':p,'c':c})
+    else:        
+        return render(request,'user/nocertificate.html',{'l': l,'p':p,'c':c})
 
 def gocertificate(request):
-    l = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
-    return render(request, 'user/certificate.html', {'l': l, 'p': p, 'c': c})
-
-
+    l= usersign.objects.get(sid=request.session['login'])
+    p= Platform.objects.get(platformid=l.platformid)
+    c= Course.objects.get(courseid=l.course_id)
+    return render(request,'user/certificate.html',{'l': l,'p':p,'c':c})
+    
 def gonocertificate(request):
-    l = usersign.objects.get(sid=request.session['login'])
-    p = Platform.objects.get(platformid=request.session['platform'])
-    c = Course.objects.get(courseid=request.session['level'])
-    return render(request, 'user/nocertificate.html', {'l': l, 'p': p, 'c': c})
-
+    l= usersign.objects.get(sid=request.session['login'])
+    p= Platform.objects.get(platformid=l.platformid)
+    c= Course.objects.get(courseid=l.course_id)
+    return render(request,'user/nocertificate.html',{'l': l,'p':p,'c':c})
 
 def score1(request):
     if request.method == 'POST':
